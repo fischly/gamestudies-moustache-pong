@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>Game Studies - 360 Pong: Moustache edition</title>
+    
+    <!-- load most beautiful font in existence :P -->
+    <style>
+        @font-face {
+            font-family: Beleren;
+            src: url("./fonts/beleren-bold.woff") format("woff"), /* Modern Browsers */
+                url("./fonts/beleren-bold.otf") format("opentype"), /* Open Type Font */
+                url("./fonts/beleren-bold.svg") format("svg"), /* Legacy iOS */
+                url("./fonts/beleren-bold.ttf") format("truetype"), /* Safari, Android, iOS */
+                url("./fonts/beleren-bold.woff2") format("woff2"); /* Modern Browsers */
+        }
+    </style>
+    
+    <!-- load extern libraries -->
+	<script src="libs/matter.js" defer></script>
+    <script src="libs/decomp.js" defer></script>
+    <script src="libs/pathseg.js" defer></script>
+
+    <script src="ball.js" defer></script>
+    <script src="wall.js" defer></script>
+    <script src="item.js" defer></script>
+    <script src="events.js" defer></script>
+    <script src="background-emote.js" defer></script>
+
+    <!-- <script src="math-helper.js" defer></script> -->
+</head>
+<body>
+    <!-- <h1 style="font-family: Beleren;">360 Pong: Moustache edition</h1>
+    <h2 style="font-family: Beleren;">Welcome to my Game Studies project.</h2> -->
+    <!-- main game canvas -->
+    <canvas width="600" height="600" id="main-canvas"></canvas>
+    <!-- svg images directly in the DOM, that way, they do not have to be loaded externally-->
+    <svg
+        style="display: none;"
+        id="moustache1"
+        version="1.1"
+        viewBox="0 0 55.948269 9.8090982"
+        height="9.8090982mm"
+        width="55.948269mm">
+        <defs
+            id="defs2" />
+        <g
+            transform="translate(27.973,4.904098)"
+            id="layer1">
+            <path
+            id="path4529"
+            d="m -27.866016,-1.8422836 c 3.312098,1.67246375 7.853077,6.7254549 18.4027195,-1.1103051 4.69826,-3.08032 8.1652701,-1.228861 9.56752958,-0.448848 2.97755042,-1.946409 5.50842042,-1.602615 8.43359042,-0.354351 4.9460745,2.94378591 10.8247245,8.625993 19.3240245,1.9607511 -1.90602,3.1745599 -3.94307,5.9759449 -12.61495,6.4019709 C 9.4988239,4.4153763 4.6798235,2.7573963 0.03335308,0.47282014 -3.8220965,2.2934793 -8.0461065,3.6620583 -11.660282,4.3943223 c -5.059154,0.855579 -11.076756,0.814868 -16.205734,-6.2366059 z"
+            style="display:inline;fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:5.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        </g>
+    </svg>
+
+    <svg
+        style="display: none;"
+        id="moustache2"
+        version="1.1"
+        viewBox="0 0 51.919773 19.247549"
+        height="19.247549mm"
+        width="51.919773mm">
+        <defs
+            id="defs2" />
+        <g
+            transform="translate(-27.575917,-99.530327)"
+            id="layer1">
+            <path
+                id="path5111"
+                d="m 53.554132,100.55689 c 11.836584,-2.192041 20.440066,-0.47429 24.695703,6.50133 2.163614,5.06897 0.98341,8.60528 -1.777342,11.31886 0.887745,-6.62192 -3.315039,-7.7998 -6.828737,-7.39 -12.238602,2.61933 -14.989813,-3.65894 -16.18317,-8.93348 -0.362678,3.63066 -3.965456,11.50486 -13.971524,9.47348 -6.105543,-2.16322 -9.922181,0.46144 -9.061979,6.94531 -1.978332,-1.55863 -4.174967,-6.23148 -1.422135,-11.93933 4.127832,-6.22554 12.395841,-8.128912 24.549184,-5.97617 z"
+                style="display:inline;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        </g>
+    </svg>
+
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+    <svg
+        style="display: none;"
+        id="moustache3"
+        version="1.1"
+        viewBox="0 0 32.512547 15.072975"
+        height="15.072975mm"
+        width="32.512547mm">
+        <defs
+            id="defs2" />
+        <g
+            transform="translate(-71.175365,-100.01858)"
+            id="layer1">
+            <path
+            id="path6836"
+            d="m 87.417179,108.83556 c 1.887777,-1.39017 2.890823,-1.01088 4.069177,-0.98221 2.496202,3.34081 6.019246,2.35577 7.202917,0.93544 2.278337,-1.79402 0.496124,-6.94097 -3.461142,-5.05139 -1.751973,0.66478 -2.100601,4.52843 1.964432,4.95785 -3.068714,1.4172 -7.77271,-2.02673 -4.630445,-6.54811 2.151006,-2.808542 8.117152,-3.639454 10.617282,2.57247 2.81238,5.68695 -6.544741,15.69906 -15.668675,6.73519 -10.389625,8.69903 -18.447966,-0.0384 -15.841022,-7.12538 4.510233,-7.193365 9.909103,-3.12954 10.883172,-1.38715 1.521657,2.06669 -0.0085,7.61449 -4.817533,5.56589 3.331185,0.0711 4.672111,-4.57978 1.169302,-5.14494 -5.476301,-0.16687 -4.05753,5.61079 -1.496708,6.36101 3.751594,1.04936 4.411189,-0.55169 5.799748,-1.82411 1.567946,-0.26492 3.129151,-0.50625 4.209495,0.93544 z"
+            style="display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        </g>
+    </svg>
+
+
+    <!-- background image -->
+    <img src="./wolken_background.svg" style="display: none;" id="sky-background">
+    <img src="./titlescreen.svg" style="display: none;" id="titlescreen">
+
+    <!-- sounds-->
+    <audio src="./sounds/wall_hit.wav" id="wall-hit"></audio>
+
+    <script src="moustache.js" defer></script>
+    <script src="main.js" defer></script>
+    <!-- <script src="events.js" defer></script> -->
+</body>
+</html>
